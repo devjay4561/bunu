@@ -44,14 +44,14 @@
         background: rgba(11, 17, 32, 0.8);
         backdrop-filter: saturate(140%) blur(8px);
         border-bottom: 1px solid var(--border);
-        z-index: 10;
-        height: 89px;
+        z-index: 20;
+        height: auto;
       }
       .hero {
         display: flex;
         gap: 18px;
         align-items: center;
-        padding: 18px 28px;
+        padding: 12px 16px;
         height: 100%;
       }
       .mark {
@@ -70,6 +70,12 @@
         color: var(--muted);
         font-size: 13px;
         margin-top: 2px;
+      }
+      .sub-mobile {
+        display: none;
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 6px;
       }
       .bar {
         display: flex;
@@ -330,15 +336,22 @@
 
       /* 모바일 최적화 */
       @media (max-width: 768px) {
+        header {
+          position: static;
+        }
         .wrap {
           padding: 16px;
         }
         .hero {
-          padding: 16px;
-          gap: 12px;
+          padding: 10px 12px;
+          gap: 10px;
           flex-direction: column;
           text-align: center;
           height: auto;
+        }
+        .mark {
+          width: 32px;
+          height: 32px;
         }
         .toolbar {
           margin-left: 0;
@@ -350,10 +363,13 @@
         }
 
         h1 {
-          font-size: 18px;
+          font-size: 17px;
         }
         .sub {
-          font-size: 12px;
+          display: none;
+        }
+        .sub-mobile {
+          display: block;
         }
 
         .cards {
@@ -383,6 +399,7 @@
           font-size: 11px;
           position: sticky;
           top: 0;
+          z-index: 2;
         }
         tbody td {
           padding: 12px 8px;
@@ -500,10 +517,15 @@
       <div class="hero wrap">
         <div class="mark" aria-hidden="true"></div>
         <div>
-          <h1>분유 재랭킹 (의학적 가중치)</h1>
+          <h1>분유 랭킹</h1>
           <div class="sub">
-            장·흡수/변 상태·실제 지표 중심 가중치로 재점수화 — SN‑2(OPO)↑ ·
-            HMO/GOS/FOS/프로바이오틱스↑ · DHA+ARA 동시·균형↑ · 일반 팜유↓ ·
+            장·흡수/변 상태, 모유 성분 유사 지표에 비중을 둔 재점수화 —
+            SN‑2(OPO)↑ · HMO/GOS/FOS/프로바이오틱스↑ · DHA+ARA 균형↑ · 일반
+            팜유↓ · 락토페린↑
+          </div>
+          <div class="sub-mobile">
+            장·흡수/변, 모유성분 유사 지표 중심 재점수화<br />
+            SN‑2(OPO) · HMO/GOS/FOS/프로바이오틱스 · DHA+ARA 균형 · 일반 팜유↓ ·
             락토페린↑
           </div>
         </div>
