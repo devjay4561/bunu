@@ -1,394 +1,1173 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>분유 재랭킹 (의학적 가중치) — 공유용</title>
-  <style>
-    :root{
-      --bg:#0b1324;
-      --panel:#111a30;
-      --card:#141f39;
-      --muted:#9fb0d0;
-      --text:#e8f0ff;
-      --accent:#7aa2ff;
-      --accent-2:#71f0c0;
-      --danger:#ff6b6b;
-      --warn:#ffd166;
-      --ok:#71f0c0;
-      --chip:#1e2a4a;
-      --border:#22345e;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;background:linear-gradient(180deg,#0b1324 0%,#0b1120 100%);color:var(--text);font:15px/1.6 "Pretendard",system-ui,Segoe UI,Apple SD Gothic Neo,malgun gothic,AppleGothic,sans-serif}
-    .wrap{max-width:1200px;margin:0 auto;padding:28px}
-    header{position:sticky;top:0;background:rgba(11,17,32,.8);backdrop-filter:saturate(140%) blur(8px);border-bottom:1px solid var(--border);z-index:10; height: 89px;}
-    .hero{display:flex;gap:18px;align-items:center;padding:18px 28px; height: 100%;}
-    .mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 10px 30px rgba(122,162,255,.35)}
-    h1{margin:0;font-size:20px;letter-spacing:.2px}
-    .sub{color:var(--muted);font-size:13px; margin-top: 2px;}
-    .bar{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-    .chip{border:1px solid var(--border);background:var(--chip);color:var(--text);padding:6px 10px;border-radius:999px;font-size:12px}
-    .toolbar{display:flex;gap:8px;margin-left:auto}
-    .btn{appearance:none;border:1px solid var(--border);background:var(--card);color:var(--text);padding:8px 12px;border-radius:10px;cursor:pointer;transition:all .2s ease}
-    .btn:hover{border-color:var(--accent);box-shadow:0 4px 18px rgba(122,162,255,.18)}
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>분유 재랭킹 (의학적 가중치) — 공유용</title>
+    <style>
+      :root {
+        --bg: #0b1324;
+        --panel: #111a30;
+        --card: #141f39;
+        --muted: #9fb0d0;
+        --text: #e8f0ff;
+        --accent: #7aa2ff;
+        --accent-2: #71f0c0;
+        --danger: #ff6b6b;
+        --warn: #ffd166;
+        --ok: #71f0c0;
+        --chip: #1e2a4a;
+        --border: #22345e;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        background: linear-gradient(180deg, #0b1324 0%, #0b1120 100%);
+        color: var(--text);
+        font: 15px/1.6 "Pretendard", system-ui, Segoe UI, Apple SD Gothic Neo,
+          malgun gothic, AppleGothic, sans-serif;
+      }
+      .wrap {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 28px;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        background: rgba(11, 17, 32, 0.8);
+        backdrop-filter: saturate(140%) blur(8px);
+        border-bottom: 1px solid var(--border);
+        z-index: 10;
+        height: 89px;
+      }
+      .hero {
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        padding: 18px 28px;
+        height: 100%;
+      }
+      .mark {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        box-shadow: 0 10px 30px rgba(122, 162, 255, 0.35);
+      }
+      h1 {
+        margin: 0;
+        font-size: 20px;
+        letter-spacing: 0.2px;
+      }
+      .sub {
+        color: var(--muted);
+        font-size: 13px;
+        margin-top: 2px;
+      }
+      .bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .chip {
+        border: 1px solid var(--border);
+        background: var(--chip);
+        color: var(--text);
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+      }
+      .toolbar {
+        display: flex;
+        gap: 8px;
+        margin-left: auto;
+      }
+      .btn {
+        appearance: none;
+        border: 1px solid var(--border);
+        background: var(--card);
+        color: var(--text);
+        padding: 8px 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .btn:hover {
+        border-color: var(--accent);
+        box-shadow: 0 4px 18px rgba(122, 162, 255, 0.18);
+      }
 
-    .cards{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin:22px 0}
-    .card{grid-column:span 12;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px}
-    @media(min-width:760px){.card.sm6{grid-column:span 6}}
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 16px;
+        margin: 22px 0;
+      }
+      .card {
+        grid-column: span 12;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px;
+      }
+      @media (min-width: 760px) {
+        .card.sm6 {
+          grid-column: span 6;
+        }
+      }
 
-    .card h2{margin:0 0 10px;font-size:18px}
-    .card .muted{color:var(--muted);font-size:13px;margin-bottom:6px}
+      .card h2 {
+        margin: 0 0 10px;
+        font-size: 18px;
+      }
+      .card .muted {
+        color: var(--muted);
+        font-size: 13px;
+        margin-bottom: 6px;
+      }
 
-    .rank-list{display:grid;gap:8px}
-    .rank-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#0e1832}
-    .rank-no{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;font-weight:600;background:linear-gradient(135deg,var(--accent),#5dd6ff)}
-    .badge{padding:3px 9px;border-radius:999px;border:1px solid var(--border);font-size:11px;color:var(--muted); background-color: var(--chip);}
-    .badge.ok{border-color:rgba(113,240,192,.4);color:#aef5dd; background-color: rgba(113, 240, 192, 0.1);}
-    .badge.warn{border-color:rgba(255,209,102,.35);color:#ffe6a6; background-color: rgba(255, 209, 102, 0.1);}
-    .badge.no{border-color:rgba(255,107,107,.35);color:#ffb3b3; background-color: rgba(255, 107, 107, 0.1);}
+      .rank-list {
+        display: grid;
+        gap: 8px;
+      }
+      .rank-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: #0e1832;
+      }
+      .rank-no {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        font-weight: 600;
+        background: linear-gradient(135deg, var(--accent), #5dd6ff);
+      }
+      .badge {
+        padding: 3px 9px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        font-size: 11px;
+        color: var(--muted);
+        background-color: var(--chip);
+      }
+      .badge.ok {
+        border-color: rgba(113, 240, 192, 0.4);
+        color: #aef5dd;
+        background-color: rgba(113, 240, 192, 0.1);
+      }
+      .badge.warn {
+        border-color: rgba(255, 209, 102, 0.35);
+        color: #ffe6a6;
+        background-color: rgba(255, 209, 102, 0.1);
+      }
+      .badge.no {
+        border-color: rgba(255, 107, 107, 0.35);
+        color: #ffb3b3;
+        background-color: rgba(255, 107, 107, 0.1);
+      }
 
-    .table-wrap{margin-top:6px;border:1px solid var(--border);border-radius:16px;overflow:hidden; overflow-x: auto;}
-    table{width:100%;min-width:1100px;border-collapse:separate;border-spacing:0;background:var(--panel)}
-    thead th{position:sticky;top:0;background:#0e1730;font-size:12px;color:#bcd0ff;text-align:left;padding:12px 15px;border-bottom:1px solid var(--border);cursor:pointer; white-space:nowrap; z-index: 1;}
-    thead th .sort-indicator { margin-left: 5px; color: var(--accent); display: inline-block; width: 10px; text-align: center;}
-    tbody td{padding:14px 15px;border-bottom:1px solid #1a274b;color:#dce6ff;font-size:14px; white-space:nowrap; vertical-align: middle;}
-    tbody tr:last-child td { border-bottom: none; }
-    tbody tr { transition: background-color 0.2s ease-in-out; }
-    tbody tr:nth-child(even) { background-color: #141f39; }
-    tbody tr:hover{background:#1e2a4a}
-    .t-right{text-align:right}
-    
-    .cell-name { font-weight: 600; color: var(--text); }
-    .cell-score { font-weight: 600; color: var(--accent-2); }
-    .cell-icon { text-align: center; }
-    .cell-icon svg { width: 20px; height: 20px; color: var(--ok); margin: 0 auto; }
+      .table-wrap {
+        margin-top: 6px;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      table {
+        width: 100%;
+        min-width: 1600px;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: var(--panel);
+      }
+      thead th {
+        position: sticky;
+        top: 0;
+        background: #0e1730;
+        font-size: 13px;
+        color: #bcd0ff;
+        text-align: left;
+        padding: 16px 12px;
+        border-bottom: 1px solid var(--border);
+        cursor: pointer;
+        white-space: nowrap;
+        z-index: 1;
+        font-weight: 600;
+      }
+      thead th .sort-indicator {
+        margin-left: 5px;
+        color: var(--accent);
+        display: inline-block;
+        width: 10px;
+        text-align: center;
+      }
+      tbody td {
+        padding: 16px 12px;
+        border-bottom: 1px solid #1a274b;
+        color: #dce6ff;
+        font-size: 14px;
+        white-space: nowrap;
+        vertical-align: middle;
+      }
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+      tbody tr {
+        transition: background-color 0.2s ease-in-out;
+      }
+      tbody tr:nth-child(even) {
+        background-color: #141f39;
+      }
+      tbody tr:hover {
+        background: #1e2a4a;
+      }
+      .t-right {
+        text-align: right;
+      }
 
-    footer{color:var(--muted);font-size:12px;margin:26px 0 10px}
-    .notice{border:1px dashed var(--border);padding:12px;border-radius:12px;background:#0f1a34;color:var(--muted)}
-    #filters-panel label { cursor: pointer; }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="hero wrap">
-      <div class="mark" aria-hidden="true"></div>
-      <div>
-        <h1>분유 재랭킹 (의학적 가중치)</h1>
-        <div class="sub">장·흡수/변 상태·실제 지표 중심 가중치로 재점수화 — SN‑2(OPO)↑ · HMO/GOS/FOS/프로바이오틱스↑ · DHA+ARA 동시·균형↑ · 일반 팜유↓ · 락토페린↑</div>
+      /* 컬럼별 최적화된 너비 */
+      table thead th:nth-child(1) {
+        width: 60px;
+        min-width: 60px;
+      } /* 순위 */
+      table thead th:nth-child(2) {
+        width: 200px;
+        min-width: 180px;
+      } /* 제품명 */
+      table thead th:nth-child(3) {
+        width: 80px;
+        min-width: 80px;
+      } /* 국내/해외 */
+      table thead th:nth-child(4) {
+        width: 80px;
+        min-width: 80px;
+      } /* 점수 */
+      table thead th:nth-child(5) {
+        width: 100px;
+        min-width: 100px;
+      } /* SN‑2/OPO */
+      table thead th:nth-child(6) {
+        width: 100px;
+        min-width: 100px;
+      } /* A2/산양 */
+      table thead th:nth-child(7) {
+        width: 140px;
+        min-width: 140px;
+      } /* 팜유 */
+      table thead th:nth-child(8) {
+        width: 200px;
+        min-width: 180px;
+      } /* 프리바이오틱스 */
+      table thead th:nth-child(9) {
+        width: 120px;
+        min-width: 120px;
+      } /* 프로바이오틱스 */
+      table thead th:nth-child(10) {
+        width: 80px;
+        min-width: 80px;
+      } /* DHA */
+      table thead th:nth-child(11) {
+        width: 80px;
+        min-width: 80px;
+      } /* ARA */
+      table thead th:nth-child(12) {
+        width: 100px;
+        min-width: 100px;
+      } /* DHA:ARA */
+      table thead th:nth-child(13) {
+        width: 100px;
+        min-width: 100px;
+      } /* 락토페린 */
+
+      .cell-name {
+        font-weight: 600;
+        color: var(--text);
+      }
+      .cell-score {
+        font-weight: 600;
+        color: var(--accent-2);
+      }
+      .cell-icon {
+        text-align: center;
+      }
+      .cell-icon svg {
+        width: 20px;
+        height: 20px;
+        color: var(--ok);
+        margin: 0 auto;
+      }
+
+      footer {
+        color: var(--muted);
+        font-size: 12px;
+        margin: 26px 0 10px;
+      }
+      .notice {
+        border: 1px dashed var(--border);
+        padding: 12px;
+        border-radius: 12px;
+        background: #0f1a34;
+        color: var(--muted);
+      }
+      #filters-panel label {
+        cursor: pointer;
+      }
+
+      /* 모바일 최적화 */
+      @media (max-width: 768px) {
+        .wrap {
+          padding: 16px;
+        }
+        .hero {
+          padding: 16px;
+          gap: 12px;
+          flex-direction: column;
+          text-align: center;
+          height: auto;
+        }
+        .toolbar {
+          margin-left: 0;
+          justify-content: center;
+        }
+        .btn {
+          font-size: 12px;
+          padding: 6px 10px;
+        }
+
+        h1 {
+          font-size: 18px;
+        }
+        .sub {
+          font-size: 12px;
+        }
+
+        .cards {
+          grid-template-columns: 1fr;
+          gap: 12px;
+          margin: 16px 0;
+        }
+        .card {
+          padding: 14px;
+        }
+        .card h2 {
+          font-size: 16px;
+        }
+
+        /* 테이블 모바일 최적화 */
+        .table-wrap {
+          margin-top: 10px;
+          border-radius: 12px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        table {
+          min-width: 1200px;
+        }
+        thead th {
+          padding: 12px 8px;
+          font-size: 11px;
+          position: sticky;
+          top: 0;
+        }
+        tbody td {
+          padding: 12px 8px;
+          font-size: 13px;
+        }
+
+        /* 첫 번째 컬럼(순위)를 고정 */
+        table thead th:first-child,
+        table tbody td:first-child {
+          position: sticky;
+          left: 0;
+          background: var(--panel);
+          z-index: 3;
+          border-right: 1px solid var(--border);
+        }
+
+        /* 두 번째 컬럼(제품명)도 고정 */
+        table thead th:nth-child(2),
+        table tbody td:nth-child(2) {
+          position: sticky;
+          left: 60px;
+          background: var(--panel);
+          z-index: 3;
+          border-right: 1px solid var(--border);
+        }
+
+        tbody tr:nth-child(even) td:first-child,
+        tbody tr:nth-child(even) td:nth-child(2) {
+          background: #141f39;
+        }
+
+        tbody tr:hover td:first-child,
+        tbody tr:hover td:nth-child(2) {
+          background: #1e2a4a;
+        }
+
+        /* 스크롤 힌트 */
+        .table-wrap::after {
+          content: "← 좌우로 스크롤하여 더 많은 정보를 확인하세요 →";
+          display: block;
+          text-align: center;
+          padding: 8px;
+          font-size: 11px;
+          color: var(--muted);
+          background: rgba(11, 17, 32, 0.8);
+          border-top: 1px solid var(--border);
+        }
+
+        /* 필터 패널 모바일 최적화 */
+        #filters-panel {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        #filters-panel label {
+          margin-right: 0 !important;
+          font-size: 13px;
+        }
+
+        /* 랭킹 아이템 모바일 최적화 */
+        .rank-item {
+          padding: 8px 10px;
+          gap: 8px;
+        }
+
+        .rank-no {
+          width: 24px;
+          height: 24px;
+          font-size: 12px;
+        }
+
+        .badge {
+          font-size: 10px;
+          padding: 2px 6px;
+        }
+      }
+
+      /* 태블릿 최적화 */
+      @media (min-width: 769px) and (max-width: 1024px) {
+        .wrap {
+          padding: 20px;
+        }
+        table {
+          min-width: 1400px;
+        }
+        thead th {
+          padding: 14px 10px;
+        }
+        tbody td {
+          padding: 14px 10px;
+        }
+      }
+
+      /* 큰 화면 최적화 */
+      @media (min-width: 1400px) {
+        .wrap {
+          max-width: 1400px;
+          padding: 32px;
+        }
+        table {
+          min-width: 100%;
+        }
+        thead th {
+          padding: 18px 14px;
+        }
+        tbody td {
+          padding: 18px 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="hero wrap">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <h1>분유 재랭킹 (의학적 가중치)</h1>
+          <div class="sub">
+            장·흡수/변 상태·실제 지표 중심 가중치로 재점수화 — SN‑2(OPO)↑ ·
+            HMO/GOS/FOS/프로바이오틱스↑ · DHA+ARA 동시·균형↑ · 일반 팜유↓ ·
+            락토페린↑
+          </div>
+        </div>
+        <div class="toolbar">
+          <button class="btn" onclick="window.print()">PDF로 내보내기</button>
+          <button class="btn" onclick="FormulaRankerApp.toggleFilters()">
+            필터 보기
+          </button>
+        </div>
       </div>
-      <div class="toolbar">
-        <button class="btn" onclick="window.print()">PDF로 내보내기</button>
-        <button class="btn" onclick="FormulaRankerApp.toggleFilters()">필터 보기</button>
-      </div>
-    </div>
-  </header>
+    </header>
 
-  <main class="wrap">
-    <section class="cards">
-      <article class="card sm6">
-        <h2>TOP 5 — 빠른 추천</h2>
-        <div class="rank-list" id="top5-list">
-          <!-- JS로 채움 -->
-        </div>
-      </article>
-
-      <article class="card sm6">
-        <h2>상황별 베스트</h2>
-        <div class="muted">아기 상태별로 바로 고르기</div>
-        <div class="rank-list">
-          <div class="rank-item"><div class="rank-no">①</div>
-            <div style="flex:1">
-              <div><strong>변비·딱딱한 변 우려</strong></div>
-              <div class="muted">루비락 · 위드맘 제왕 1단계 · 위드맘 (모두 OPO/SN‑2)</div>
-            </div>
-            <span class="badge ok">SN‑2/OPO</span>
+    <main class="wrap">
+      <section class="cards">
+        <article class="card sm6">
+          <h2>TOP 5 — 빠른 추천</h2>
+          <div class="rank-list" id="top5-list">
+            <!-- JS로 채움 -->
           </div>
-          <div class="rank-item"><div class="rank-no">②</div>
-            <div style="flex:1">
-              <div><strong>장 환경(모유 성분 유사) 강화</strong></div>
-              <div class="muted">트루맘 뉴클라스 · 뢰벤짠 · 카브리타 (HMO + 프리/프로)</div>
+        </article>
+
+        <article class="card sm6">
+          <h2>상황별 베스트</h2>
+          <div class="muted">아기 상태별로 바로 고르기</div>
+          <div class="rank-list">
+            <div class="rank-item">
+              <div class="rank-no">①</div>
+              <div style="flex: 1">
+                <div><strong>변비·딱딱한 변 우려</strong></div>
+                <div class="muted">
+                  루비락 · 위드맘 제왕 1단계 · 위드맘 (모두 OPO/SN‑2)
+                </div>
+              </div>
+              <span class="badge ok">SN‑2/OPO</span>
             </div>
-            <span class="badge ok">HMO</span>
-          </div>
-          <div class="rank-item"><div class="rank-no">③</div>
-            <div style="flex:1">
-              <div><strong>A2·산양 단백 선호</strong></div>
-              <div class="muted">압타밀 에센시스 · A2 플래티넘 · 카브리타</div>
+            <div class="rank-item">
+              <div class="rank-no">②</div>
+              <div style="flex: 1">
+                <div><strong>장 환경(모유 성분 유사) 강화</strong></div>
+                <div class="muted">
+                  트루맘 뉴클라스 · 뢰벤짠 · 카브리타 (HMO + 프리/프로)
+                </div>
+              </div>
+              <span class="badge ok">HMO</span>
             </div>
-            <span class="badge">A2/Goat</span>
-          </div>
-          <div class="rank-item"><div class="rank-no">④</div>
-            <div style="flex:1">
-              <div><strong>락토페린 포함 원해요</strong></div>
-              <div class="muted">루비락 · 위드맘 제왕 1단계 · 퓨어락 로열플러스</div>
+            <div class="rank-item">
+              <div class="rank-no">③</div>
+              <div style="flex: 1">
+                <div><strong>A2·산양 단백 선호</strong></div>
+                <div class="muted">
+                  압타밀 에센시스 · A2 플래티넘 · 카브리타
+                </div>
+              </div>
+              <span class="badge">A2/Goat</span>
             </div>
-            <span class="badge">LF</span>
+            <div class="rank-item">
+              <div class="rank-no">④</div>
+              <div style="flex: 1">
+                <div><strong>락토페린 포함 원해요</strong></div>
+                <div class="muted">
+                  루비락 · 위드맘 제왕 1단계 · 퓨어락 로열플러스
+                </div>
+              </div>
+              <span class="badge">LF</span>
+            </div>
           </div>
-        </div>
-      </article>
+        </article>
 
-      <article class="card">
-        <h2>전체 순위 & 세부 스펙</h2>
-        <div class="muted">열 제목을 클릭하면 정렬됩니다 · 상단 <em>필터 보기</em>로 조건을 켜고 끌 수 있어요</div>
-        <div class="table-wrap">
-          <table id="rank-table">
-            <thead>
-              <tr>
-                <th>순위</th>
-                <th data-k="name">제품명</th>
-                <th data-k="region">국내/해외</th>
-                <th data-k="score">점수</th>
-                <th data-k="sn2">SN‑2/OPO</th>
-                <th data-k="a2">A2/산양</th>
-                <th data-k="palm">팜유</th>
-                <th data-k="pre">프리바이오틱스</th>
-                <th data-k="pro">프로바이오틱스</th>
-                <th data-k="dha">DHA</th>
-                <th data-k="ara">ARA</th>
-                <th data-k="ratio">DHA:ARA</th>
-                <th data-k="lf">락토페린</th>
-              </tr>
-            </thead>
-            <tbody><!-- JS inject --></tbody>
-          </table>
-        </div>
-        <div id="filters-panel" class="notice" style="display:none; margin-top:12px">
-          <label style="margin-right:12px"><input type="checkbox" data-filter="sn2"> SN‑2/OPO만</label>
-          <label style="margin-right:12px"><input type="checkbox" data-filter="nopalm"> 일반 팜유 제외</label>
-          <label style="margin-right:12px"><input type="checkbox" data-filter="hmo"> HMO 포함</label>
-          <label style="margin-right:12px"><input type="checkbox" data-filter="pro"> 프로바이오틱스 포함</label>
-          <label style="margin-right:12px"><input type="checkbox" data-filter="a2"> A2/산양</label>
-          <button class="btn" style="margin-left:10px" onclick="FormulaRankerApp.resetFilters()">초기화</button>
-        </div>
-      </article>
+        <article class="card">
+          <h2>전체 순위 & 세부 스펙</h2>
+          <div class="muted">
+            열 제목을 클릭하면 정렬됩니다 · 상단 <em>필터 보기</em>로 조건을
+            켜고 끌 수 있어요
+          </div>
+          <div class="table-wrap">
+            <table id="rank-table">
+              <thead>
+                <tr>
+                  <th>순위</th>
+                  <th data-k="name">제품명</th>
+                  <th data-k="region">국내/해외</th>
+                  <th data-k="score">점수</th>
+                  <th data-k="sn2">SN‑2/OPO</th>
+                  <th data-k="a2">A2/산양</th>
+                  <th data-k="palm">팜유</th>
+                  <th data-k="pre">프리바이오틱스</th>
+                  <th data-k="pro">프로바이오틱스</th>
+                  <th data-k="dha">DHA</th>
+                  <th data-k="ara">ARA</th>
+                  <th data-k="ratio">DHA:ARA</th>
+                  <th data-k="lf">락토페린</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- JS inject -->
+              </tbody>
+            </table>
+          </div>
+          <div
+            id="filters-panel"
+            class="notice"
+            style="display: none; margin-top: 12px"
+          >
+            <label style="margin-right: 12px"
+              ><input type="checkbox" data-filter="sn2" /> SN‑2/OPO만</label
+            >
+            <label style="margin-right: 12px"
+              ><input type="checkbox" data-filter="nopalm" /> 일반 팜유
+              제외</label
+            >
+            <label style="margin-right: 12px"
+              ><input type="checkbox" data-filter="hmo" /> HMO 포함</label
+            >
+            <label style="margin-right: 12px"
+              ><input type="checkbox" data-filter="pro" /> 프로바이오틱스
+              포함</label
+            >
+            <label style="margin-right: 12px"
+              ><input type="checkbox" data-filter="a2" /> A2/산양</label
+            >
+            <button
+              class="btn"
+              style="margin-left: 10px"
+              onclick="FormulaRankerApp.resetFilters()"
+            >
+              초기화
+            </button>
+          </div>
+        </article>
 
-      <article class="card">
-        <h2>해석 노트</h2>
-        <div class="notice">
-          <ul style="margin:6px 0 0 18px;padding:0">
-            <li>가중치는 장·흡수/변 상태와 직접 연관된 지표에 비중을 둡니다: <strong>SN‑2(OPO)</strong> &gt; <strong>HMO/GOS/FOS·프로바이오틱스</strong> &gt; <strong>DHA+ARA 동시·비율</strong> &gt; 락토페린 &gt; (소폭) 덱스트린 감점 &gt; 일반 팜유 감점.</li>
-            <li>표의 ‘리놀레산’ 숫자(0.45–0.7)는 출처 표기 관례상 <strong>DHA:ARA 비율</strong>로 간주해 사용했습니다(미기재 시 계산).</li>
-            <li>가격·유통 난이도는 본 순위에서 배점하지 않았습니다(공유용: 의학적 스펙 중심).</li>
-          </ul>
-        </div>
-      </article>
-    </section>
+        <article class="card">
+          <h2>해석 노트</h2>
+          <div class="notice">
+            <ul style="margin: 6px 0 0 18px; padding: 0">
+              <li>
+                가중치는 장·흡수/변 상태와 직접 연관된 지표에 비중을 둡니다:
+                <strong>SN‑2(OPO)</strong> &gt;
+                <strong>HMO/GOS/FOS·프로바이오틱스</strong> &gt;
+                <strong>DHA+ARA 동시·비율</strong> &gt; 락토페린 &gt; (소폭)
+                덱스트린 감점 &gt; 일반 팜유 감점.
+              </li>
+              <li>
+                표의 ‘리놀레산’ 숫자(0.45–0.7)는 출처 표기 관례상
+                <strong>DHA:ARA 비율</strong>로 간주해 사용했습니다(미기재 시
+                계산).
+              </li>
+              <li>
+                가격·유통 난이도는 본 순위에서 배점하지 않았습니다(공유용:
+                의학적 스펙 중심).
+              </li>
+            </ul>
+          </div>
+        </article>
+      </section>
 
-    <footer>
-      본 문서는 부모 교육/정보 공유용이며, 영아 개별 건강은 <strong>소아과 상담</strong>을 우선하세요.
-    </footer>
-  </main>
+      <footer>
+        본 문서는 부모 교육/정보 공유용이며, 영아 개별 건강은
+        <strong>소아과 상담</strong>을 우선하세요.
+      </footer>
+    </main>
 
-  <script>
-    /**
-     * FormulaRankerApp
-     * 분유 랭킹 데이터 시각화 애플리케이션
-     */
-    const FormulaRankerApp = {
-      data: [
-        {name:"루비락", region:"해외", score:3.40, sn2:true, a2:false, palm:"팜유(SN-2 팔미트산)", pre:"GOS,FOS", pro:"0(천만/100ml)", dha:7.2, ara:10.8, ratio:0.63, lf:4.5},
-        {name:"위드맘 제왕 1단계", region:"국내", score:2.95, sn2:true, a2:false, palm:"가공유지(인팻)", pre:"GOS,FOS", pro:"133만/100ml", dha:12, ara:24, ratio:0.48, lf:7},
-        {name:"위드맘", region:"국내", score:2.75, sn2:true, a2:false, palm:"가공유지(인팻)", pre:"GOS,FOS", pro:"133만/100ml", dha:13, ara:26, ratio:0.63, lf:0},
-        {name:"트루맘 뉴클라스", region:"국내", score:2.50, sn2:false, a2:false, palm:"-", pre:"GOS,FOS,모유올리고당", pro:"-", dha:15.6, ara:15.6, ratio:0.62, lf:10},
-        {name:"뢰벤짠", region:"해외", score:2.40, sn2:false, a2:false, palm:"-", pre:"GOS,FOS,모유올리고당", pro:"100만/분유g", dha:15, ara:15, ratio:0.58, lf:0},
-        {name:"압타밀 에센시스", region:"해외", score:2.30, sn2:false, a2:true, palm:"-", pre:"GOS,FOS", pro:"83만/g", dha:11.3, ara:17.6, ratio:null, lf:0},
-        {name:"아이엠마더", region:"국내", score:2.25, sn2:false, a2:false, palm:"야자유", pre:"GOS", pro:"기재안되어있음.", dha:9.8, ara:9.8, ratio:0.63, lf:10},
-        {name:"카브리타", region:"해외", score:2.10, sn2:false, a2:true, palm:"팜유", pre:"GOS,FOS,모유올리고당", pro:"100만/g", dha:13.4, ara:14, ratio:0.61, lf:0},
-        {name:"퓨어락 로열플러스", region:"해외", score:2.10, sn2:false, a2:false, palm:"팜유", pre:"GOS,FOS", pro:"38만/분유g", dha:17, ara:17, ratio:0.54, lf:6.6},
-        {name:"앱솔루트 명작", region:"국내", score:1.85, sn2:false, a2:false, palm:"야자유", pre:"GOS,FOS,모유올리고당", pro:"-", dha:15, ara:15, ratio:0.60, lf:0},
-        {name:"A2벨라미스 베타제니카", region:"해외", score:1.80, sn2:false, a2:true, palm:"유기농팜유", pre:"GOS,FOS", pro:"26만/분유g", dha:15, ara:15.8, ratio:0.68, lf:0},
-        {name:"압타밀 프로푸트라", region:"해외", score:1.70, sn2:false, a2:false, palm:"-", pre:"GOS,FOS,모유올리고당", pro:"-", dha:17, ara:17, ratio:0.45, lf:0},
-        {name:"A2 플래티넘", region:"해외", score:1.40, sn2:false, a2:true, palm:"-", pre:"GOS", pro:"x", dha:12, ara:12, ratio:0.48, lf:0},
-        {name:"후디스 산양분유", region:"국내", score:1.40, sn2:false, a2:true, palm:"-", pre:"GOS", pro:"-", dha:19.5, ara:15.6, ratio:0.40, lf:0},
-        {name:"앱솔루트 유기농 궁", region:"국내", score:1.35, sn2:false, a2:false, palm:"유기농팜유", pre:"GOS,FOS,모유올리고당", pro:"-", dha:15, ara:15, ratio:0.50, lf:0},
-        {name:"일루마", region:"해외", score:1.35, sn2:false, a2:false, palm:"팜유", pre:"GOS,모유올리고당", pro:"-", dha:12, ara:15, ratio:0.52, lf:0},
-        {name:"노발락골드", region:"해외", score:0.85, sn2:false, a2:false, palm:"팜유", pre:"GOS 0.2g", pro:"0", dha:7.8, ara:10.4, ratio:0.70, lf:0},
-        {name:"홀레", region:"해외", score:0.70, sn2:false, a2:false, palm:"유기농 팜유", pre:"-", pro:"-", dha:5.2, ara:5.8, ratio:0.54, lf:0},
-        {name:"HIPP", region:"해외", score:0.50, sn2:false, a2:false, palm:"유기농 팜유", pre:"GOS", pro:"-", dha:19, ara:null, ratio:0.60, lf:0}
-      ],
-      state: {
-        filteredAndSortedData: [],
-        sortKey: 'score',
-        sortDir: 'desc',
-        filters: {}
-      },
-      elements: {},
+    <script>
+      /**
+       * FormulaRankerApp
+       * 분유 랭킹 데이터 시각화 애플리케이션
+       */
+      const FormulaRankerApp = {
+        data: [
+          {
+            name: "루비락",
+            region: "해외",
+            score: 3.4,
+            sn2: true,
+            a2: false,
+            palm: "팜유(SN-2 팔미트산)",
+            pre: "GOS,FOS",
+            pro: "0(천만/100ml)",
+            dha: 7.2,
+            ara: 10.8,
+            ratio: 0.63,
+            lf: 4.5,
+          },
+          {
+            name: "위드맘 제왕 1단계",
+            region: "국내",
+            score: 2.95,
+            sn2: true,
+            a2: false,
+            palm: "가공유지(인팻)",
+            pre: "GOS,FOS",
+            pro: "133만/100ml",
+            dha: 12,
+            ara: 24,
+            ratio: 0.48,
+            lf: 7,
+          },
+          {
+            name: "위드맘",
+            region: "국내",
+            score: 2.75,
+            sn2: true,
+            a2: false,
+            palm: "가공유지(인팻)",
+            pre: "GOS,FOS",
+            pro: "133만/100ml",
+            dha: 13,
+            ara: 26,
+            ratio: 0.63,
+            lf: 0,
+          },
+          {
+            name: "트루맘 뉴클라스",
+            region: "국내",
+            score: 2.5,
+            sn2: false,
+            a2: false,
+            palm: "-",
+            pre: "GOS,FOS,모유올리고당",
+            pro: "-",
+            dha: 15.6,
+            ara: 15.6,
+            ratio: 0.62,
+            lf: 10,
+          },
+          {
+            name: "뢰벤짠",
+            region: "해외",
+            score: 2.4,
+            sn2: false,
+            a2: false,
+            palm: "-",
+            pre: "GOS,FOS,모유올리고당",
+            pro: "100만/분유g",
+            dha: 15,
+            ara: 15,
+            ratio: 0.58,
+            lf: 0,
+          },
+          {
+            name: "압타밀 에센시스",
+            region: "해외",
+            score: 2.3,
+            sn2: false,
+            a2: true,
+            palm: "-",
+            pre: "GOS,FOS",
+            pro: "83만/g",
+            dha: 11.3,
+            ara: 17.6,
+            ratio: null,
+            lf: 0,
+          },
+          {
+            name: "아이엠마더",
+            region: "국내",
+            score: 2.25,
+            sn2: false,
+            a2: false,
+            palm: "야자유",
+            pre: "GOS",
+            pro: "기재안되어있음.",
+            dha: 9.8,
+            ara: 9.8,
+            ratio: 0.63,
+            lf: 10,
+          },
+          {
+            name: "카브리타",
+            region: "해외",
+            score: 2.1,
+            sn2: false,
+            a2: true,
+            palm: "팜유",
+            pre: "GOS,FOS,모유올리고당",
+            pro: "100만/g",
+            dha: 13.4,
+            ara: 14,
+            ratio: 0.61,
+            lf: 0,
+          },
+          {
+            name: "퓨어락 로열플러스",
+            region: "해외",
+            score: 2.1,
+            sn2: false,
+            a2: false,
+            palm: "팜유",
+            pre: "GOS,FOS",
+            pro: "38만/분유g",
+            dha: 17,
+            ara: 17,
+            ratio: 0.54,
+            lf: 6.6,
+          },
+          {
+            name: "앱솔루트 명작",
+            region: "국내",
+            score: 1.85,
+            sn2: false,
+            a2: false,
+            palm: "야자유",
+            pre: "GOS,FOS,모유올리고당",
+            pro: "-",
+            dha: 15,
+            ara: 15,
+            ratio: 0.6,
+            lf: 0,
+          },
+          {
+            name: "A2벨라미스 베타제니카",
+            region: "해외",
+            score: 1.8,
+            sn2: false,
+            a2: true,
+            palm: "유기농팜유",
+            pre: "GOS,FOS",
+            pro: "26만/분유g",
+            dha: 15,
+            ara: 15.8,
+            ratio: 0.68,
+            lf: 0,
+          },
+          {
+            name: "압타밀 프로푸트라",
+            region: "해외",
+            score: 1.7,
+            sn2: false,
+            a2: false,
+            palm: "-",
+            pre: "GOS,FOS,모유올리고당",
+            pro: "-",
+            dha: 17,
+            ara: 17,
+            ratio: 0.45,
+            lf: 0,
+          },
+          {
+            name: "A2 플래티넘",
+            region: "해외",
+            score: 1.4,
+            sn2: false,
+            a2: true,
+            palm: "-",
+            pre: "GOS",
+            pro: "x",
+            dha: 12,
+            ara: 12,
+            ratio: 0.48,
+            lf: 0,
+          },
+          {
+            name: "후디스 산양분유",
+            region: "국내",
+            score: 1.4,
+            sn2: false,
+            a2: true,
+            palm: "-",
+            pre: "GOS",
+            pro: "-",
+            dha: 19.5,
+            ara: 15.6,
+            ratio: 0.4,
+            lf: 0,
+          },
+          {
+            name: "앱솔루트 유기농 궁",
+            region: "국내",
+            score: 1.35,
+            sn2: false,
+            a2: false,
+            palm: "유기농팜유",
+            pre: "GOS,FOS,모유올리고당",
+            pro: "-",
+            dha: 15,
+            ara: 15,
+            ratio: 0.5,
+            lf: 0,
+          },
+          {
+            name: "일루마",
+            region: "해외",
+            score: 1.35,
+            sn2: false,
+            a2: false,
+            palm: "팜유",
+            pre: "GOS,모유올리고당",
+            pro: "-",
+            dha: 12,
+            ara: 15,
+            ratio: 0.52,
+            lf: 0,
+          },
+          {
+            name: "노발락골드",
+            region: "해외",
+            score: 0.85,
+            sn2: false,
+            a2: false,
+            palm: "팜유",
+            pre: "GOS 0.2g",
+            pro: "0",
+            dha: 7.8,
+            ara: 10.4,
+            ratio: 0.7,
+            lf: 0,
+          },
+          {
+            name: "홀레",
+            region: "해외",
+            score: 0.7,
+            sn2: false,
+            a2: false,
+            palm: "유기농 팜유",
+            pre: "-",
+            pro: "-",
+            dha: 5.2,
+            ara: 5.8,
+            ratio: 0.54,
+            lf: 0,
+          },
+          {
+            name: "HIPP",
+            region: "해외",
+            score: 0.5,
+            sn2: false,
+            a2: false,
+            palm: "유기농 팜유",
+            pre: "GOS",
+            pro: "-",
+            dha: 19,
+            ara: null,
+            ratio: 0.6,
+            lf: 0,
+          },
+        ],
+        state: {
+          filteredAndSortedData: [],
+          sortKey: "score",
+          sortDir: "desc",
+          filters: {},
+        },
+        elements: {},
 
-      init() {
-        document.addEventListener('DOMContentLoaded', () => {
-          this.cacheElements();
-          this.bindEvents();
-          this.processDataAndRender();
-        });
-      },
+        init() {
+          document.addEventListener("DOMContentLoaded", () => {
+            this.cacheElements();
+            this.bindEvents();
+            this.processDataAndRender();
+          });
+        },
 
-      cacheElements() {
-        this.elements.tableBody = document.querySelector('#rank-table tbody');
-        this.elements.tableHeaders = document.querySelectorAll('#rank-table thead th[data-k]');
-        this.elements.top5List = document.querySelector('#top5-list');
-        this.elements.filtersPanel = document.querySelector('#filters-panel');
-        this.elements.filterCheckboxes = document.querySelectorAll('#filters-panel input[type="checkbox"]');
-      },
+        cacheElements() {
+          this.elements.tableBody = document.querySelector("#rank-table tbody");
+          this.elements.tableHeaders = document.querySelectorAll(
+            "#rank-table thead th[data-k]"
+          );
+          this.elements.top5List = document.querySelector("#top5-list");
+          this.elements.filtersPanel = document.querySelector("#filters-panel");
+          this.elements.filterCheckboxes = document.querySelectorAll(
+            '#filters-panel input[type="checkbox"]'
+          );
+        },
 
-      bindEvents() {
-        this.elements.tableHeaders.forEach(th => {
-          th.addEventListener('click', () => this.handleSort(th.dataset.k));
-        });
-        this.elements.filterCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', () => this.handleFilterChange());
-        });
-      },
+        bindEvents() {
+          this.elements.tableHeaders.forEach((th) => {
+            th.addEventListener("click", () => this.handleSort(th.dataset.k));
+          });
+          this.elements.filterCheckboxes.forEach((checkbox) => {
+            checkbox.addEventListener("change", () =>
+              this.handleFilterChange()
+            );
+          });
+        },
 
-      processDataAndRender() {
-        let filtered = this.data.filter(r => {
-          const f = this.state.filters;
-          if (f.sn2 && !r.sn2) return false;
-          if (f.nopalm && typeof r.palm === 'string' && r.palm.includes('팜유') && !r.palm.includes('SN-2')) return false;
-          if (f.hmo && !(typeof r.pre === 'string' && r.pre.includes('모유올리고당'))) return false;
-          if (f.pro && (!r.pro || ['-', '0', 'x'].includes(r.pro) || r.pro.includes('기재안되어있음'))) return false;
-          if (f.a2 && !r.a2) return false;
-          return true;
-        });
+        processDataAndRender() {
+          let filtered = this.data.filter((r) => {
+            const f = this.state.filters;
+            if (f.sn2 && !r.sn2) return false;
+            if (
+              f.nopalm &&
+              typeof r.palm === "string" &&
+              r.palm.includes("팜유") &&
+              !r.palm.includes("SN-2")
+            )
+              return false;
+            if (
+              f.hmo &&
+              !(typeof r.pre === "string" && r.pre.includes("모유올리고당"))
+            )
+              return false;
+            if (
+              f.pro &&
+              (!r.pro ||
+                ["-", "0", "x"].includes(r.pro) ||
+                r.pro.includes("기재안되어있음"))
+            )
+              return false;
+            if (f.a2 && !r.a2) return false;
+            return true;
+          });
 
-        const { sortKey, sortDir } = this.state;
-        filtered.sort((a, b) => {
-          const valA = a[sortKey];
-          const valB = b[sortKey];
-          if (valA == null) return 1;
-          if (valB == null) return -1;
-          
-          let comparison = 0;
-          if (typeof valA === 'string') {
-            comparison = valA.localeCompare(valB);
-          } else {
-            comparison = valA - valB;
-          }
-          return sortDir === 'asc' ? comparison : -comparison;
-        });
-        
-        this.state.filteredAndSortedData = filtered;
-        this.renderTable();
-        this.renderTop5();
-      },
+          const { sortKey, sortDir } = this.state;
+          filtered.sort((a, b) => {
+            const valA = a[sortKey];
+            const valB = b[sortKey];
+            if (valA == null) return 1;
+            if (valB == null) return -1;
 
-      renderTable() {
-        const { tableBody } = this.elements;
-        tableBody.innerHTML = '';
-        if (this.state.filteredAndSortedData.length === 0) {
+            let comparison = 0;
+            if (typeof valA === "string") {
+              comparison = valA.localeCompare(valB);
+            } else {
+              comparison = valA - valB;
+            }
+            return sortDir === "asc" ? comparison : -comparison;
+          });
+
+          this.state.filteredAndSortedData = filtered;
+          this.renderTable();
+          this.renderTop5();
+        },
+
+        renderTable() {
+          const { tableBody } = this.elements;
+          tableBody.innerHTML = "";
+          if (this.state.filteredAndSortedData.length === 0) {
             tableBody.innerHTML = `<tr><td colspan="13" style="text-align:center; padding: 40px; color: var(--muted);">선택한 필터에 해당하는 제품이 없습니다.</td></tr>`;
             return;
-        }
-        this.state.filteredAndSortedData.forEach((r, idx) => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
+          }
+          this.state.filteredAndSortedData.forEach((r, idx) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
             <td class="t-right">${idx + 1}</td>
             <td class="cell-name">${r.name}</td>
             <td>${r.region}</td>
             <td class="t-right cell-score">${r.score.toFixed(2)}</td>
             ${this.renderIconCell(r.sn2)}
-            <td>${r.a2 ? '<span class="badge">A2/산양</span>' : '-'}</td>
+            <td>${r.a2 ? '<span class="badge">A2/산양</span>' : "-"}</td>
             ${this.renderPalmCell(r.palm)}
-            <td>${r.pre || '-'}</td>
-            <td>${(!r.pro || ['-', '0', 'x'].includes(r.pro) || r.pro.includes('기재안되어있음')) ? '-' : '<span class="badge ok">포함</span>'}</td>
-            <td class="t-right">${r.dha ?? '-'}</td>
-            <td class="t-right">${r.ara ?? '-'}</td>
-            <td class="t-right">${r.ratio ?? '-'}</td>
-            <td class="t-right">${r.lf > 0 ? r.lf : '-'}</td>`;
-          tableBody.appendChild(tr);
-        });
-        this.updateSortIndicators();
-      },
-      
-      renderTop5() {
-        const top5 = [...this.data].sort((a,b) => b.score - a.score).slice(0, 5);
-        this.elements.top5List.innerHTML = top5.map((r, i) => `
+            <td>${r.pre || "-"}</td>
+            <td>${
+              !r.pro ||
+              ["-", "0", "x"].includes(r.pro) ||
+              r.pro.includes("기재안되어있음")
+                ? "-"
+                : '<span class="badge ok">포함</span>'
+            }</td>
+            <td class="t-right">${r.dha ?? "-"}</td>
+            <td class="t-right">${r.ara ?? "-"}</td>
+            <td class="t-right">${r.ratio ?? "-"}</td>
+            <td class="t-right">${r.lf > 0 ? r.lf : "-"}</td>`;
+            tableBody.appendChild(tr);
+          });
+          this.updateSortIndicators();
+        },
+
+        renderTop5() {
+          const top5 = [...this.data]
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 5);
+          this.elements.top5List.innerHTML = top5
+            .map(
+              (r, i) => `
           <div class="rank-item">
             <div class="rank-no">${i + 1}</div>
             <div style="flex:1">
               <div style="font-weight:600">${r.name}</div>
-              <div class="muted">점수 ${r.score.toFixed(2)} ${r.sn2 ? '· SN‑2/OPO' : ''} ${r.a2 ? '· A2/산양' : ''}</div>
+              <div class="muted">점수 ${r.score.toFixed(2)} ${
+                r.sn2 ? "· SN‑2/OPO" : ""
+              } ${r.a2 ? "· A2/산양" : ""}</div>
             </div>
-            ${r.sn2 ? '<span class="badge ok">SN‑2</span>' : ''}
-            ${r.a2 ? '<span class="badge">A2</span>' : ''}
+            ${r.sn2 ? '<span class="badge ok">SN‑2</span>' : ""}
+            ${r.a2 ? '<span class="badge">A2</span>' : ""}
           </div>
-        `).join('');
-      },
+        `
+            )
+            .join("");
+        },
 
-      renderIconCell(isTrue) {
-        if (isTrue) {
-          return `<td class="cell-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg></td>`;
-        }
-        return `<td><span class="muted" style="display: block; text-align: center;">-</span></td>`;
-      },
+        renderIconCell(isTrue) {
+          if (isTrue) {
+            return `<td class="cell-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg></td>`;
+          }
+          return `<td><span class="muted" style="display: block; text-align: center;">-</span></td>`;
+        },
 
-      renderPalmCell(palmValue) {
-        let badgeClass = '';
-        let text = palmValue || '-';
-        if (typeof palmValue === 'string' && palmValue !== '-') {
-            if (palmValue.includes('SN-2') || palmValue.includes('인팻')) {
-                badgeClass = 'ok'; text = 'SN-2 구조';
-            } else if (palmValue.includes('유기농')) {
-                badgeClass = 'warn'; text = '일반 팜유(유기농)';
-            } else if (palmValue.includes('팜유') || palmValue.includes('야자유')) {
-                badgeClass = 'no'; text = '일반 팜유';
+        renderPalmCell(palmValue) {
+          let badgeClass = "";
+          let text = palmValue || "-";
+          if (typeof palmValue === "string" && palmValue !== "-") {
+            if (palmValue.includes("SN-2") || palmValue.includes("인팻")) {
+              badgeClass = "ok";
+              text = "SN-2 구조";
+            } else if (palmValue.includes("유기농")) {
+              badgeClass = "warn";
+              text = "일반 팜유(유기농)";
+            } else if (
+              palmValue.includes("팜유") ||
+              palmValue.includes("야자유")
+            ) {
+              badgeClass = "no";
+              text = "일반 팜유";
             }
-        }
-        return `<td>${text !== '-' ? `<span class="badge ${badgeClass}">${text}</span>` : '-'}</td>`;
-      },
-
-      updateSortIndicators() {
-        this.elements.tableHeaders.forEach(th => {
-          // 먼저 기존에 있던 아이콘을 찾아서 제거합니다.
-          const existingIndicator = th.querySelector('.sort-indicator');
-          if (existingIndicator) {
-            existingIndicator.remove();
           }
+          return `<td>${
+            text !== "-"
+              ? `<span class="badge ${badgeClass}">${text}</span>`
+              : "-"
+          }</td>`;
+        },
 
-          // 현재 정렬된 열에만 새로운 아이콘을 추가합니다.
-          const key = th.dataset.k;
-          if (key === this.state.sortKey) {
-            const indicator = document.createElement('span');
-            indicator.className = 'sort-indicator';
-            indicator.textContent = this.state.sortDir === 'asc' ? '▲' : '▼';
-            th.appendChild(indicator);
+        updateSortIndicators() {
+          this.elements.tableHeaders.forEach((th) => {
+            // 먼저 기존에 있던 아이콘을 찾아서 제거합니다.
+            const existingIndicator = th.querySelector(".sort-indicator");
+            if (existingIndicator) {
+              existingIndicator.remove();
+            }
+
+            // 현재 정렬된 열에만 새로운 아이콘을 추가합니다.
+            const key = th.dataset.k;
+            if (key === this.state.sortKey) {
+              const indicator = document.createElement("span");
+              indicator.className = "sort-indicator";
+              indicator.textContent = this.state.sortDir === "asc" ? "▲" : "▼";
+              th.appendChild(indicator);
+            }
+          });
+        },
+
+        handleSort(key) {
+          if (this.state.sortKey === key) {
+            this.state.sortDir = this.state.sortDir === "asc" ? "desc" : "asc";
+          } else {
+            this.state.sortKey = key;
+            this.state.sortDir =
+              typeof this.data[0][key] === "string" ? "asc" : "desc";
           }
-        });
-      },
+          this.processDataAndRender();
+        },
 
-      handleSort(key) {
-        if (this.state.sortKey === key) {
-          this.state.sortDir = this.state.sortDir === 'asc' ? 'desc' : 'asc';
-        } else {
-          this.state.sortKey = key;
-          this.state.sortDir = (typeof this.data[0][key] === 'string') ? 'asc' : 'desc';
-        }
-        this.processDataAndRender();
-      },
-
-      handleFilterChange() {
-        this.state.filters = {};
-        this.elements.filterCheckboxes.forEach(cb => {
+        handleFilterChange() {
+          this.state.filters = {};
+          this.elements.filterCheckboxes.forEach((cb) => {
             if (cb.checked) this.state.filters[cb.dataset.filter] = true;
-        });
-        this.processDataAndRender();
-      },
+          });
+          this.processDataAndRender();
+        },
 
-      toggleFilters() {
-        const { filtersPanel } = this.elements;
-        const isHidden = filtersPanel.style.display === 'none' || !filtersPanel.style.display;
-        filtersPanel.style.display = isHidden ? 'block' : 'none';
-      },
+        toggleFilters() {
+          const { filtersPanel } = this.elements;
+          const isHidden =
+            filtersPanel.style.display === "none" ||
+            !filtersPanel.style.display;
+          filtersPanel.style.display = isHidden ? "block" : "none";
+        },
 
-      resetFilters() {
-        this.elements.filterCheckboxes.forEach(c => c.checked = false);
-        this.handleFilterChange();
-      }
-    };
+        resetFilters() {
+          this.elements.filterCheckboxes.forEach((c) => (c.checked = false));
+          this.handleFilterChange();
+        },
+      };
 
-    FormulaRankerApp.init();
-  </script>
-</body>
+      FormulaRankerApp.init();
+    </script>
+  </body>
 </html>
-
